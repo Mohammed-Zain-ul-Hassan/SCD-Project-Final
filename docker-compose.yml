@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  # Database Service
+  mongo-db:
+    image: mongo
+    container_name: mongo-db
+    networks:
+      - vault-net
+    volumes:
+      - mongo-data:/data/db
+    restart: always
+
+  # App Service
+  vault-app:
+    build: .             # This builds from your local Dockerfile (Requirement)
+    container_name: vault-app
+    depends_on:
+      - mongo-db
+    networks:
+      - vault-net
+    environment:
+      - MONGO_URI=mongodb://mongo-db:27017/nodevault
+    stdin_open: true     # Required for interactive CLI
+    tty: true            # Required for interactive CLI
+    ports:
+      - "3000:3000"      # Optional, good practice
+
+# Define Network
+networks:
+  vault-net:
+    driver: bridge
+
+# Define Volume
+volumes:
+  mongo-data:
