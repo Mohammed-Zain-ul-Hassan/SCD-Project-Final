@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const readline = require('readline');
 const db = require('./db/mongo'); // Switched to MongoDB file
 const fs = require('fs');
